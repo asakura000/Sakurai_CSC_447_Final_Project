@@ -266,11 +266,7 @@ class Dataset(object):
             unrelated_pairs.add((ex.entity_1, ex.entity_2))
             unrelated_pairs.add((ex.entity_2, ex.entity_1))
         return unrelated_pairs
-    
-    """
-    Atsuko
-    """
-    
+        
     def find_match(self):
         related_pairs = set()
         for ex in self.corpus.examples:
@@ -559,21 +555,17 @@ def predict(splits, train_result, split_name='dev', sampling_rate=0.1, vectorize
     return predictions, assess_y
 
 
-def evaluate_predictions(predictions, test_y, verbose=True):
+def evaluate_predictions(predictions, test_y):
     results = {}  # one result row for each relation
-    if verbose:
-        print_statistics_header()
     for rel, preds in predictions.items():
         stats = precision_recall_fscore_support(test_y[rel], preds, beta=0.5)
         stats = [stat[1] for stat in stats]  # stats[1] is the stat for label True
         stats.append(len(test_y[rel]))
         results[rel] = stats
-        if verbose:
-            print_statistics_row(rel, results[rel])
+       
     avg_result = macro_average_results(results)
-    if verbose:
-        print_statistics_footer(avg_result)
-    return avg_result[2]  # return f_0.5 score as summary statistic
+    
+    return results # one result row for each relation
 
 
 def experiment(
